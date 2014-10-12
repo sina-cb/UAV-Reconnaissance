@@ -8,19 +8,17 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "UAVReconnaissanceModel.h"
+#include "State.h"
+#include "Action.h"
 using namespace std;
 
-enum actions {NORTH = 0, WEST = 1, SOUTH = 2, EAST = 3};
+int main()
+{
+	UAVReconnaissanceModel instance(4, 4);
+	instance.valueIteration(0.99, 0.0001);
 
-
-
-int main() {
-
-	actions a;
-
-	if (a == NORTH){
-		cout << "North";
-	}
 
 	return 0;
 }
+
