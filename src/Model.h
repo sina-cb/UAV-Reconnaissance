@@ -21,19 +21,24 @@ protected:
 	std::vector<Action>* actions;
 	std::map<State, double>* utilities;
 	std::map<State, double>* rewards;
+	std::map<State, std::vector<Action> > *policies;
 
 public:
 	double transition(State /*source*/, Action /*action*/, State /*destination*/);
 	double reward(State /*state*/);
 	double utility(State /*state*/);
-
 	bool hasState(State /*state*/);
+
 	State getState(State /*state*/);
+	std::vector<State> neighbors(State /*state*/);
 	State convolveState(State /*state*/, Action /*action*/);
 
+	void makePolicies();
 	void valueIteration(double /*discount*/, double /*epsilon*/);
-	void printPolicy();
+	void printUtilities();
 	void printRewards();
+	void printPolicy(State /*state*/);
+	void printPolicies();
 };
 
 #endif

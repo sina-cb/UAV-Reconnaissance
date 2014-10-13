@@ -114,26 +114,8 @@ void Model::valueIteration(double discount, double epsilon){
 	cout << endl << endl << "Initial rewards function:" << endl;
 	printRewards();
 
-	cout << endl << "Converged Policy after " << (iterationCount - 1)<< " iterations: " << endl;
-	printPolicy();
-}
-
-void Model::printRewards(){
-	for (int y = ((UAVReconnaissanceModel*)this)->HEIGHT - 1; y >= 0 ; y--){
-		for (int x = 0; x < ((UAVReconnaissanceModel*)this)->WIDTH; x++){
-			cout << State(x, y).to_string() << " : " << reward(State(x, y)) << "\t";
-		}
-		cout << endl;
-	}
-}
-
-void Model::printPolicy(){
-	for (int y = ((UAVReconnaissanceModel*)this)->HEIGHT - 1; y >= 0 ; y--){
-		for (int x = 0; x < ((UAVReconnaissanceModel*)this)->WIDTH; x++){
-			cout << State(x, y).to_string() << " : " << utility(State(x, y)) << "\t";
-		}
-		cout << endl;
-	}
+	cout << endl << "Converged Values after " << (iterationCount - 1)<< " iterations: " << endl;
+	printUtilities();
 }
 
 double Model::transition(State source, Action action, State destination){
@@ -170,6 +152,74 @@ double Model::utility(State state){
 	return (*utilities)[state];
 }
 
+void Model::printRewards(){
+	for (int y = ((UAVReconnaissanceModel*)this)->HEIGHT - 1; y >= 0 ; y--){
+		for (int x = 0; x < ((UAVReconnaissanceModel*)this)->WIDTH; x++){
+			cout << State(x, y).to_string() << " : " << reward(State(x, y)) << "\t";
+		}
+		cout << endl;
+	}
+}
+
+void Model::printUtilities(){
+	for (int y = ((UAVReconnaissanceModel*)this)->HEIGHT - 1; y >= 0 ; y--){
+		for (int x = 0; x < ((UAVReconnaissanceModel*)this)->WIDTH; x++){
+			cout << State(x, y).to_string() << " : " << utility(State(x, y)) << "\t";
+		}
+		cout << endl;
+	}
+}
+
+void Model::printPolicy(State state){
+	for (unsigned int i = 0; i < states->size(); i++){
+		if ((*states)[i] == state){
+			vector<Action> policy = (*policies)[(*states)[i]];
+			for (unsigned int j = 0; j < policy.size(); j++){
+				cout << "(" << policy[j].to_string(*actions) << ") " ;
+			}
+		}
+	}
+}
+
+void Model::printPolicies(){
+	cout << endl;
+	for (vector<State>::iterator state = states->begin(); state != states->end(); state++){
+		if (state->terminal){
+			cout << "Policy for start stare: " << state->to_string() << " --> ";
+			cout << "Terminal start state, no action needed!" << endl;
+		}else{
+			cout << "Policy for start stare: " << state->to_string() << " --> ";
+			printPolicy(*state);
+			cout << endl;
+		}
+	}
+}
+
+State Model::getState(State state){
+	vector<State>::iterator it = find(states->begin(), states->end(), state);
+	if (it != states->end()){
+		return (*it);
+	}
+	return State(-1, -1, false, true);
+}
+
+bool Model::hasState(State state){
+	vector<State>::iterator it = find(states->begin(), states->end(), state);
+	return (it != states->end());
+}
+
+State Model::convolveState(State state, Action action){
+	State result(state);
+	result.X += action.dX;
+	result.Y += action.dY;
+
+	if (((UAVReconnaissanceModel*)this)->stateOnBoard(result)){
+		return result;
+	}else{
+		return state;
+	}
+}
+
 bool UAVReconnaissanceModel::stateOnBoard(State state){
 	if (state.X < 0 || state.X >= WIDTH){
 		return false;
@@ -187,16 +237,43 @@ bool UAVReconnaissanceModel::stateOnBoard(State state){
 	return true;
 }
 
-State Model::convolveState(State state, Action action){
-	State result(state);
-	result.X += action.dX;
-	result.Y += action.dY;
+void Model::makePolicies(){
 
-	if (((UAVReconnaissanceModel*)this)->stateOnBoard(result)){
-		return result;
-	}else{
-		return state;
+	policies = new map<State, std::vector<Action> >();
+
+	for (vector<State>::iterator state = states->begin(); state != states->end(); state++){
+		vector<Action> policy;
+		State currentState(*state);
+
+		while (!currentState.terminal){
+			vector<State> nbr = neighbors(currentState);
+			int index = 0;
+			for (unsigned int i = 0; i < nbr.size(); i++){
+				if (utility(nbr[index]) < utility(nbr[i])){
+					index = i;
+				}
+			}
+			int dX = nbr[index].X - currentState.X;
+			int dY = nbr[index].Y - currentState.Y;
+
+			policy.push_back(Action(dX, dY, ""));
+			currentState = getState(nbr[index]);
+		}
+		(*policies)[*state] = policy;
 	}
+
+}
+
+std::vector<State> Model::neighbors(State state){
+	vector<State> results;
+	for (unsigned int i = 0; i < actions->size(); i++){
+		State temp = convolveState(state, (*actions)[i]);
+
+		if (!(temp == state)){
+			results.push_back(temp);
+		}
+	}
+	return results;
 }
 
 vector<Action> UAVReconnaissanceModel::perpendicularActions(Action src){
@@ -209,19 +286,6 @@ vector<Action> UAVReconnaissanceModel::perpendicularActions(Action src){
 		results.push_back(Action(0, -1, "SOUTH"));
 	}
 	return results;
-}
-
-State Model::getState(State state){
-	vector<State>::iterator it = find(states->begin(), states->end(), state);
-	if (it != states->end()){
-		return (*it);
-	}
-	return State(-1, -1, false, true);
-}
-
-bool Model::hasState(State state){
-	vector<State>::iterator it = find(states->begin(), states->end(), state);
-	return (it != states->end());
 }
 
 void UAVReconnaissanceModel::printAllStates(){

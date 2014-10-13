@@ -9,6 +9,8 @@
 #define ACTION_H_
 
 #include <string>
+#include <vector>
+using namespace std;
 
 class Action{
 
@@ -29,6 +31,12 @@ public:
 		this->name = "";
 	}
 
+	Action(int dX, int dY){
+		this->dX = dX;
+		this->dY = dY;
+		this->name = "";
+	}
+
 	Action(int dX, int dY, std::string name){
 		this->dX = dX;
 		this->dY = dY;
@@ -37,7 +45,7 @@ public:
 
 	bool operator==(const Action& other) const
 	{
-		return (dX == other.dX && dY == other.dY && name == other.name);
+		return (dX == other.dX && dY == other.dY);
 	}
 
 	std::string to_string()
@@ -46,6 +54,20 @@ public:
 		res = res + "Name: " + name;
 		res = res + "\tdX: " + static_cast<std::ostringstream*>( &(std::ostringstream() << dX) )->str();
 		res = res + "\tdY: " + static_cast<std::ostringstream*>( &(std::ostringstream() << dY) )->str();
+		return res;
+	}
+
+	std::string to_string(vector<Action> actions)
+	{
+		for (unsigned int i = 0; i < actions.size(); i++){
+			if (actions[i] == *this){
+				name = actions[i].name;
+			}
+		}
+		std::string res = "";
+		res = res +/* "Name: " + */name;
+//		res = res + "\tdX: " + static_cast<std::ostringstream*>( &(std::ostringstream() << dX) )->str();
+//		res = res + "\tdY: " + static_cast<std::ostringstream*>( &(std::ostringstream() << dY) )->str();
 		return res;
 	}
 };

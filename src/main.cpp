@@ -17,7 +17,8 @@ int main()
 {
 	UAVReconnaissanceModel instance(4, 4);
 	instance.valueIteration(0.99, 0.0001);
-
+	instance.makePolicies();
+	instance.printPolicies();
 
 	return 0;
 }
