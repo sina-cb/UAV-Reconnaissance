@@ -9,9 +9,9 @@
 #define UAVRECONNAISSANCEMODEL_H_
 
 #include "Model.h"
-#include <ostream>
 
-class UAVReconnaissanceModel : public Model{
+class UAVReconnaissanceModel: public Model
+{
 
 public:
 	const int WIDTH;

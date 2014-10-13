@@ -11,7 +11,8 @@
 #include <string>
 #include <sstream>
 
-class State{
+class State
+{
 
 public:
 	int X;	//Column
@@ -19,7 +20,8 @@ public:
 	bool terminal;
 	bool blocked;
 
-	State(){
+	State()
+	{
 		this->X = 0;
 		this->Y = 0;
 		this->terminal = false;
@@ -27,17 +29,20 @@ public:
 	}
 
 	State(const State& state) :
-		X(state.X), Y(state.Y),
-		terminal(state.terminal), blocked(state.blocked) {}
+			X(state.X), Y(state.Y), terminal(state.terminal), blocked(state.blocked)
+	{
+	}
 
-	State(int X, int Y){
+	State(int X, int Y)
+	{
 		this->X = X;
 		this->Y = Y;
 		this->terminal = false;
 		this->blocked = false;
 	}
 
-	State(int X, int Y, bool terminal, bool blocked){
+	State(int X, int Y, bool terminal, bool blocked)
+	{
 		this->X = X;
 		this->Y = Y;
 		this->terminal = terminal;
@@ -46,7 +51,7 @@ public:
 
 	bool operator<(const State& other) const
 	{
-		if ( X == other.X )
+		if (X == other.X)
 		{
 			return Y < other.Y;
 		}
@@ -62,20 +67,8 @@ public:
 	std::string to_string()
 	{
 		std::string res = "";
-		res = res + "(X: " + static_cast<std::ostringstream*>( &(std::ostringstream() << X) )->str();
-		res = res + ", Y: " + static_cast<std::ostringstream*>( &(std::ostringstream() << Y) )->str() + ")";
-
-		/*if (terminal){
-			res = res + "\tTerminal";
-		}else{
-			res = res + "\tNon-Terminal";
-		}
-
-		if (blocked){
-			res = res + "\tBlocked";
-		}else{
-			res = res + "\tNot-Blocked";
-		}*/
+		res = res + "(X: " + static_cast<std::ostringstream*>(&(std::ostringstream() << X))->str();
+		res = res + ", Y: " + static_cast<std::ostringstream*>(&(std::ostringstream() << Y))->str() + ")";
 
 		return res;
 	}

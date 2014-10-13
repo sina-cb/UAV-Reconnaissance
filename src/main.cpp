@@ -5,13 +5,7 @@
 // Description : UAV Reconnaissance problem for the programming assignment 2
 //============================================================================
 
-#include <iostream>
-#include <vector>
-#include <string>
 #include "UAVReconnaissanceModel.h"
-#include "State.h"
-#include "Action.h"
-using namespace std;
 
 int main()
 {
@@ -22,4 +16,3 @@ int main()
 
 	return 0;
 }
-
