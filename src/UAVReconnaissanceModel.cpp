@@ -358,7 +358,7 @@ vector<Action> UAVReconnaissanceModel::perpendicularActions(Action src)
 	return results;
 }
 
-void UAVReconnaissanceModel::printAllStates()
+void Model::printAllStates()
 {
 	for (unsigned int i = 0; i < states->size(); i++)
 	{

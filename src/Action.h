@@ -12,6 +12,11 @@
 #include <vector>
 using namespace std;
 
+/**
+ * This class is used to Model the Action used in this particular problem.
+ * We have used a generic class name Action in Model.h file and it should
+ * be implemented if someone wants to use our model.
+ */
 class Action
 {
 
@@ -20,6 +25,9 @@ public:
 	int dY;	//Row, positive goes right, negative goes left
 	std::string name;
 
+	/**
+	 * Constructor
+	 */
 	Action(std::string name)
 	{
 		this->dX = 0;
@@ -27,6 +35,9 @@ public:
 		this->name = name;
 	}
 
+	/**
+	 * Constructor
+	 */
 	Action()
 	{
 		this->dX = 0;
@@ -34,6 +45,9 @@ public:
 		this->name = "";
 	}
 
+	/**
+	 * Constructor
+	 */
 	Action(int dX, int dY)
 	{
 		this->dX = dX;
@@ -41,6 +55,9 @@ public:
 		this->name = "";
 	}
 
+	/**
+	 * Constructor
+	 */
 	Action(int dX, int dY, std::string name)
 	{
 		this->dX = dX;
@@ -48,11 +65,17 @@ public:
 		this->name = name;
 	}
 
+	/**
+	 * Used widely to compare two Action objects in the program.
+	 */
 	bool operator==(const Action& other) const
 	{
 		return (dX == other.dX && dY == other.dY);
 	}
 
+	/**
+	 * Convert an Action object to a string for more convenience.
+	 */
 	std::string to_string()
 	{
 		std::string res = "";
@@ -62,6 +85,12 @@ public:
 		return res;
 	}
 
+	/*
+	 * Convert an Action object to a string for more convenience.
+	 * This method also accepts list of all possible actions in
+	 * our domain and find the right name for each action in that
+	 * list and print our the Names ONLY!
+	 */
 	std::string to_string(vector<Action> actions)
 	{
 		for (unsigned int i = 0; i < actions.size(); i++)

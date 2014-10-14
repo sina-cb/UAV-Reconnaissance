@@ -14,13 +14,31 @@ class UAVReconnaissanceModel: public Model
 {
 
 public:
+	/**
+	 * Width of the game board
+	 */
 	const int WIDTH;
+
+	/**
+	 * Height of the game board
+	 */
 	const int HEIGHT;
 
+	/**
+	 * Constructor
+	 */
 	UAVReconnaissanceModel(int, int);
 
-	void printAllStates();
+	/**
+	 * Finds all perpendicular actions given a particular action.
+	 * This method is used in the transition model function.
+	 */
 	std::vector<Action> perpendicularActions(Action);
+
+	/**
+	 * This method checks whether a state in on the board of all states or not.
+	 * This is use after the convolution applied to each state.
+	 */
 	bool stateOnBoard(State);
 };
 

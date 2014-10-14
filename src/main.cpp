@@ -13,6 +13,5 @@ int main()
 	instance.valueIteration(0.99, 0.0001);
 	instance.makePolicies();
 	instance.printPolicies();
-
 	return 0;
 }
