@@ -230,7 +230,7 @@ void Model::printPolicies()
 	{
 		if (state->terminal)
 		{
-			cout << "Policy for start stare: " << state->to_string() << " --> ";
+			cout << "Policy for start state: " << state->to_string() << " --> ";
 			cout << "Terminal start state, no action needed!" << endl;
 		}
 		else
